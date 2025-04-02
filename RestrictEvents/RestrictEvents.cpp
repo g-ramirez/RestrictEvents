@@ -284,7 +284,27 @@ struct RestrictEventsPolicy {
 				}
 			}
 		}
-
+		// Disable PerfPower on Sequoia+
+		if (getKernelVersion() >= KernelVersion::Sequoia) {
+			DBGLOG("rev", "disabling PerfPower services");
+			procBlacklist[i++] = (char *)"/usr/libexec/PerfPowerServices";
+			procBlacklist[i++] = (char *)"/usr/libexec/PerfPowerServicesExtended";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PerfPowerMetricMonitor.framework/PerfPowerMetricMonitor";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PerfPowerServicesMetadata.framework/PerfPowerServicesMetadata";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PerfPowerServicesReader.framework/PerfPowerServicesReader";
+			procBlacklist[i++] = (char *)"/System/Library/UserEventPlugins/PerfPowerServicesEventListenerPlugin.plugin/Contents/MacOS/PerfPowerServicesEventListenerPlugin";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerLog.framework/Versions/A/XPCServices/PerfPowerTelemetryClientRegistrationService.xpc/Contents/MacOS/PerfPowerTelemetryClientRegistrationService";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerLog.framework/PowerLog";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogDatabaseReader.framework/PowerlogDatabaseReader";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogFullOperators.framework/PowerlogFullOperators";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogLiteOperators.framework/PowerlogLiteOperators";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogHelperdOperators.framework/PowerlogHelperdOperators";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogControl.framework/PowerlogControl";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogCore.framework/Versions/A/XPCServices/PerfPowerServicesSignpostReader.xpc/Contents/MacOS/PerfPowerServicesSignpostReader";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogCore.framework/Versions/A/XPCServices/PerfPowerTelemetryClientRegistrationService.xpc/Contents/MacOS/PerfPowerTelemetryClientRegistrationService";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogCore.framework/Versions/A/XPCServices/PPSFeatureFlagReader.xpc/Contents/MacOS/PPSFeatureFlagReader";
+			procBlacklist[i++] = (char *)"/System/Library/PrivateFrameworks/PowerlogCore.framework/Versions/A/XPCServices/rbdcConverter.xpc/Contents/MacOS/rbdcConverter";
+		}
 		// MacBookPro9,1 and MacBookPro10,1 GMUX fails to switch with 'displaypolicyd' active in Big Sur and newer
 		if (strstr(value, "gmux", strlen("gmux"))) {
 			if (getKernelVersion() >= KernelVersion::BigSur) {
